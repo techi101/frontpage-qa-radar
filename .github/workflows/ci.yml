@@ -1,0 +1,19 @@
+name: ci
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: "30 2 * * *"   # 08:00 IST: live smoke check before market open
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: pip install pandas pytest
+      - run: python -m pytest -q tests/test_themes.py
+      - name: live smoke checks (known bugs are strict xfails)
+        if: github.event_name == 'schedule' || github.event_name == 'push'
+        env: {LIVE: "1"}
+        run: python -m pytest -v tests/test_web_live.py

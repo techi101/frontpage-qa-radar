@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>QA Radar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f8fa;--card:#fff;--ink:#0f172a;--muted:#64748b;--line:#e5e7eb;--brand:#1677ff;--brand-soft:#eaf2ff;--good:#059669;--good-soft:#ecfdf5;--bad:#dc2626;--bad-soft:#fef2f2;--warn:#d97706;--warn-soft:#fffbeb}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45}
+.top{height:56px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 20px;position:sticky;top:0;z-index:5}
+.logo{width:28px;height:28px;border-radius:8px;background:var(--brand);color:#fff;display:grid;place-items:center;font-weight:700;font-size:13px}
+.top b{font-size:15px}.crumb{color:var(--muted)}
+.badges{margin-left:auto;display:flex;gap:8px}
+.badge{display:inline-flex;font-size:11px;font-weight:600;border-radius:4px;overflow:hidden;white-space:nowrap}.badge span{padding:3px 7px}.badge span:first-child{background:#475569;color:#fff}.badge span:last-child{background:#16a34a;color:#fff}
+.wrap{display:flex;background:linear-gradient(90deg,#fff 215px,#e5e7eb 215px,#e5e7eb 216px,transparent 216px)}
+nav{width:216px;flex:none;padding:18px 12px;height:calc(100vh - 56px);position:sticky;top:56px}
+nav a{display:block;padding:8px 10px;border-radius:8px;color:#334155;text-decoration:none;font-weight:500;margin-bottom:2px}
+nav a:hover,nav a.on{background:var(--brand-soft);color:var(--brand)}
+nav small{display:block;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.06em;margin:4px 10px 8px}
+main{flex:1;min-width:0;padding:24px;max-width:1180px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--muted);margin:0 0 20px;max-width:780px}
+.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi .l{font-size:12px;color:var(--muted);font-weight:500}.kpi .v{font-size:24px;font-weight:700;margin-top:4px}.kpi .h{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px;margin-bottom:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.card h2{font-size:15px;margin:0 0 2px}.card .q{color:var(--muted);font-size:13px;margin:0 0 14px}
+.take{margin-top:12px;padding:10px 12px;background:var(--brand-soft);border-radius:8px;color:#0b3a8a;font-size:13px}
+.issue{border-top:1px solid var(--line);padding:10px 0}.issue:first-of-type{border-top:0}
+.issue .hd{display:grid;grid-template-columns:1fr 46px;gap:10px;align-items:center}
+.issue .nm{font-weight:600;font-size:13.5px}.issue .ct{text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+.track{height:8px;background:#f1f5f9;border-radius:6px;margin-top:6px}.bar{height:100%;border-radius:6px;background:var(--brand)}
+.issue details{margin-top:6px}.issue summary{cursor:pointer;color:var(--brand);font-size:12px;font-weight:600}
+.quote{font-size:12.5px;color:#334155;background:#f8fafc;border-left:3px solid #cbd5e1;padding:6px 10px;margin:6px 0;border-radius:4px}
+.quote em{display:block;color:var(--muted);font-style:normal;font-size:11.5px;margin-top:2px}
+.pbar{display:grid;grid-template-columns:1fr 46px;gap:10px;align-items:end;margin:10px 0;font-size:13px}
+.bug{border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.bug .t{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-weight:600}
+.pill{font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px}
+.pill.open{background:var(--bad-soft);color:var(--bad)}.pill.test{background:var(--good-soft);color:var(--good)}.pill.rev{background:var(--warn-soft);color:var(--warn)}
+.bug p{margin:6px 0 0;color:#334155;font-size:13px}.bug code{font-size:12px;background:#f1f5f9;padding:1px 5px;border-radius:4px}
+.inc{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}.inc:first-child{border-top:0}
+.inc .d{font-weight:700;width:86px;flex:none;font-size:13px}.inc .x{font-size:13px;color:#334155}
+.keys{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted)}.keys i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+svg text{font-family:Inter,system-ui,sans-serif}
+.notes li{margin:6px 0;color:#334155}
+footer{color:var(--muted);font-size:12px;margin:22px 0 8px}
+@media (max-width:980px){nav{display:none}.wrap{background:none}.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){main{padding:16px}.top{padding:0 16px}.badges,.crumb{display:none}.kpi .v{font-size:20px}h1{font-size:19px}.inc .d{width:74px}}
+</style>
+</head>
+<body>
+<div class="top"><div class="logo">QA</div><b>QA Radar</b><span class="crumb">/ FrontPage: Paper Trading App</span>
+  <div class="badges"><span class="badge"><span>tests</span><span id="b1"></span></span><span class="badge"><span>known bugs pinned</span><span style="background:#d97706">3</span></span></div></div>
+<div class="wrap">
+<nav>
+  <small>Release health</small>
+  <a href="#overview" class="on">Overview</a>
+  <a href="#issues">Bug themes</a>
+  <a href="#timeline">Timeline &amp; incidents</a>
+  <a href="#web">Website bugs (verified)</a>
+  <a href="#product">Not bugs: product feedback</a>
+  <a href="#method">Method &amp; limits</a>
+</nav>
+<main>
+  <section id="overview">
+    <h1>What is actually broken, according to users</h1>
+    <p class="sub" id="sub"></p>
+    <div class="kpis" id="kpis"></div>
+  </section>
+
+  <div class="grid">
+    <section class="card" id="issues">
+      <h2>Bug themes in 1 to 3 star reviews</h2>
+      <p class="q">Reviews that describe a defect a tester can reproduce, ranked by count. Open a theme to read the most-liked reports.</p>
+      <div id="issueList"></div>
+    </section>
+    <section class="card" id="timeline">
+      <h2>Bug reports per month</h2>
+      <p class="q">Reviews reporting a bug, each month. Red dots mark days with 3 or more bug reports, which usually means an outage or a bad release.</p>
+      <div id="chart"></div>
+      <div class="keys"><span><i style="background:var(--brand)"></i>Bug reports</span><span><i style="background:var(--bad);border-radius:50%"></i>Incident day</span></div>
+      <div id="incidents" style="margin-top:12px"></div>
+    </section>
+  </div>
+
+  <section class="card" id="web" style="margin-bottom:16px">
+    <h2>Website bugs, reproduced and pinned by tests</h2>
+    <p class="q">Found on the public site front.page on 21 Nov 2026. Each one has a test that fails on purpose today and turns red the day it is fixed.</p>
+    <div class="bug"><div class="t">BUG-1 · Footer “Refunds” link opens “Post not found” <span class="pill open">Open</span><span class="pill test">Test pinned</span></div>
+      <p>Home → footer → <b>Refunds</b> (<code>/s/refunds</code>) shows the feed with “Post not found”, titled “Post refunds | Trading Discussion”. Terms, Privacy and About load fine. Several 1-star reviews are about auto-debit and refunds, so this page matters.</p></div>
+    <div class="bug"><div class="t">BUG-2 · <code>/sitemap.xml</code> is an HTML “Stock Not Found” page <span class="pill open">Open</span><span class="pill test">Test pinned</span></div>
+      <p>The stock-symbol route catches it. Search engines get no sitemap for the stock and club discussion pages, and robots.txt has no Sitemap line.</p></div>
+    <div class="bug"><div class="t">BUG-3 · Unknown URLs return 200, not 404 <span class="pill open">Open</span><span class="pill test">Test pinned</span></div>
+      <p>Any typo URL becomes an indexable “Stock Not Found” page (a soft 404).</p></div>
+    <div class="bug"><div class="t">Guard · TLS certificate expiry check <span class="pill test">Passing</span><span class="pill rev">From the 19 Jun incident</span></div>
+      <p>Fails 14 days before the certificate expires and runs daily at 08:00 IST, before market open. Users reported “chain validation failed” on 19 Jun 2026.</p></div>
+  </section>
+
+  <section class="card" id="product" style="margin-bottom:16px">
+    <h2>Not bugs: what most low ratings are really about</h2>
+    <p class="q">Low-rated reviews that mention each topic (one review can mention several). Product decisions, not QA tickets, so they are kept out of the bug list.</p>
+    <div id="prodBars"></div>
+    <div class="take" id="prodTake"></div>
+  </section>
+
+  <section class="card notes" id="method">
+    <h2>Method and limits</h2>
+    <ul id="methodList"></ul>
+  </section>
+  <footer>Built by Nitesh Kumar Yadav from public Play Store reviews and the public website. Every number is computed by analysis.py in the repo; bug reports with exact steps are in BUGS.md.</footer>
+</main>
+</div>
+<script src="data.js"></script>
+<script>
+const D = window.DATA, L = D.labels, fmt = n => n.toLocaleString('en-IN'), pct = (x, d = 0) => (x * 100).toFixed(d) + '%';
+document.getElementById('b1').textContent = '21 passed (21 Nov run)';
+document.getElementById('sub').textContent = `${fmt(D.reviews)} newest Play Store reviews (${D.from} to ${D.to}) sorted into real defects vs product complaints, plus a check of the public website.`;
+document.getElementById('kpis').innerHTML = [
+  ['Reviews analysed', fmt(D.reviews), `${D.app.installs} installs · ${(+D.app.score).toFixed(1)}★ overall`],
+  ['Rated 1 to 3 stars', fmt(D.negative), pct(D.negative / D.reviews) + ' of reviews'],
+  ['Describe a real bug', fmt(D.negative_with_bug), pct(D.negative_with_bug / D.negative) + ' of low ratings'],
+  ['Incident days', D.incidents.length, '3+ bug reports in one day'],
+].map(([l, v, h]) => `<div class="kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="h">${h}</div></div>`).join('');
+// issues
+const bt = Object.entries(D.bug_themes).filter(([, c]) => c > 0), bmax = Math.max(...bt.map(x => x[1]));
+document.getElementById('issueList').innerHTML = bt.map(([k, c]) => `<div class="issue"><div class="hd"><div class="nm">${L[k]}</div><div class="ct">${c}</div></div>
+ <div class="track"><div class="bar" style="width:${c / bmax * 100}%"></div></div>
+ <details><summary>Read reports</summary>${(D.quotes[k] || []).map(q => `<div class="quote">“${q.text.replace(/</g, '&lt;')}${q.text.length >= 220 ? '…' : ''}”<em>${q.stars}★ · ${q.date} · app v${q.version}</em></div>`).join('')}</details></div>`).join('');
+// chart
+(function () {
+  const m = D.monthly, narrow = innerWidth < 520, W = narrow ? 340 : 480, H = 220, Lp = 34, R = 10, T = 16, B = 40;
+  const ymax = Math.max(...m.map(r => r.bug_reports)) + 2, bw = (W - Lp - R) / m.length;
+  const Y = v => T + (1 - v / ymax) * (H - T - B);
+  let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Bug reports per month">`;
+  [0, Math.round(ymax / 2), ymax].forEach(v => s += `<line x1="${Lp}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eef0f3"/><text x="${Lp - 6}" y="${Y(v) + 4}" font-size="10" fill="#64748b" text-anchor="end">${v}</text>`);
+  const incMonths = new Set(D.incidents.map(i => i.day.slice(0, 7)));
+  m.forEach((r, i) => {
+    const x = Lp + i * bw + bw * 0.18, w = bw * 0.64;
+    s += `<rect x="${x}" y="${Y(r.bug_reports)}" width="${w}" height="${Y(0) - Y(r.bug_reports)}" rx="3" fill="${incMonths.has(r.month) ? '#1677ff' : '#93c5fd'}"><title>${r.month}: ${r.bug_reports} bug reports of ${r.reviews} reviews</title></rect>`;
+    if (incMonths.has(r.month)) s += `<circle cx="${x + w / 2}" cy="${Y(r.bug_reports) - 9}" r="4.5" fill="#dc2626"/>`;
+    if (i % (narrow ? 3 : 2) === 0) { const [y, mo] = r.month.split('-'); s += `<text x="${x + w / 2}" y="${H - 22}" font-size="10" fill="#64748b" text-anchor="middle">${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+mo - 1]}</text><text x="${x + w / 2}" y="${H - 9}" font-size="9" fill="#94a3b8" text-anchor="middle">${y}</text>`; }
+  });
+  document.getElementById('chart').innerHTML = s + '</svg>';
+  const nice = { ssl_or_app_load_error: 'certificate / app-load errors', crash_freeze_slow: 'freezes and server errors', pnl_or_price_wrong: 'wrong prices and server problems', order_stuck_or_error: 'order and server errors' };
+  document.getElementById('incidents').innerHTML = D.incidents.map(i => `<div class="inc"><div class="d">${new Date(i.day).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div><div class="x"><b>${i.bug_reports} bug reports</b>, mostly ${nice[i.top_theme] || L[i.top_theme]} · app v${i.versions.join(', ')}</div></div>`).join('');
+})();
+// product
+const pt = Object.entries(D.product_themes), pmax = Math.max(...pt.map(x => x[1]));
+document.getElementById('prodBars').innerHTML = pt.map(([k, c]) => `<div class="pbar"><div>${L[k]}<div class="track"><div class="bar" style="width:${c / pmax * 100}%;background:#94a3b8"></div></div></div><b style="text-align:right">${c}</b></div>`).join('');
+document.getElementById('prodTake').innerHTML = `Only <b>${pct(D.negative_with_bug / D.negative)}</b> of low ratings describe a defect. Most are about trade limits, premium and ads. QA should own the first list; product owns the second. The team replied to <b>${pct(D.negative_reply_rate)}</b> of these reviews.`;
+// method
+const h = D.hand_check;
+document.getElementById('methodList').innerHTML = [
+  `<b>Rules, not a model:</b> English and Hinglish keyword rules tag each review, so every tag can be traced to its words (themes.py). Hindi traps like “lag gaya” (costs) are tested.`,
+  `<b>Hand-checked by reading reviews:</b> first pass ${h.first_pass.real_bug}/${h.first_pass.n} tagged reviews were real bugs. After fixing the rules, a fresh sample scored ${h.after_fixes_fresh_sample.real_bug}/${h.after_fixes_fresh_sample.n} real bugs and ${h.after_fixes_fresh_sample.right_theme}/${h.after_fixes_fresh_sample.n} with the right theme.`,
+  `<b>Undercount:</b> in ${h.untagged_negative_sample.n} untagged low ratings, ${h.untagged_negative_sample.missed_bugs} were real bugs the rules missed (patterns for 5 were added after). Treat counts as a floor.`,
+  `<b>Reviews are not crash logs:</b> they show what users notice, skewed toward angry users. App bugs 4 to 6 in BUGS.md come from reviews and were not reproduced (no app account); website bugs 1 to 3 were reproduced.`,
+  `<b>Sample:</b> the newest ${fmt(D.reviews)} English-store reviews in India, fetched ${D.fetched}.`,
+].map(x => `<li>${x}</li>`).join('');
+const links = [...document.querySelectorAll('nav a')];
+addEventListener('scroll', () => { let cur = links[0]; links.forEach(a => { const el = document.querySelector(a.getAttribute('href')); if (el && el.getBoundingClientRect().top < 120) cur = a; }); links.forEach(a => a.classList.toggle('on', a === cur)); });
+</script>
+</body>
+</html>
