@@ -49,7 +49,7 @@ svg text{font-family:Inter,system-ui,sans-serif}
 .notes li{margin:6px 0;color:#334155}
 footer{color:var(--muted);font-size:12px;margin:22px 0 8px}
 @media (max-width:980px){nav{display:none}.wrap{background:none}.grid{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:520px){main{padding:16px}.top{padding:0 16px}.badges,.crumb{display:none}.kpi .v{font-size:20px}h1{font-size:19px}.inc .d{width:74px}}
+@media (max-width:520px){main{padding:16px}.top{padding:0 16px}.badges,.crumb{display:none}.kpi .v{font-size:20px}h1{font-size:19px}.inc .d{width:96px}}
 </style>
 </head>
 <body>
@@ -133,10 +133,10 @@ document.getElementById('issueList').innerHTML = bt.map(([k, c]) => `<div class=
 // chart
 (function () {
   const m = D.monthly, narrow = innerWidth < 520, W = narrow ? 340 : 480, H = 220, Lp = 34, R = 10, T = 16, B = 40;
-  const ymax = Math.max(...m.map(r => r.bug_reports)) + 2, bw = (W - Lp - R) / m.length;
+  const raw = Math.max(...m.map(r => r.bug_reports)) + 2, step = raw <= 10 ? 2 : 5, ymax = Math.ceil(raw / step) * step, bw = (W - Lp - R) / m.length;
   const Y = v => T + (1 - v / ymax) * (H - T - B);
   let s = `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Bug reports per month">`;
-  [0, Math.round(ymax / 2), ymax].forEach(v => s += `<line x1="${Lp}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eef0f3"/><text x="${Lp - 6}" y="${Y(v) + 4}" font-size="10" fill="#64748b" text-anchor="end">${v}</text>`);
+  Array.from({ length: ymax / step + 1 }, (_, i) => i * step).forEach(v => s += `<line x1="${Lp}" x2="${W - R}" y1="${Y(v)}" y2="${Y(v)}" stroke="#eef0f3"/><text x="${Lp - 6}" y="${Y(v) + 4}" font-size="10" fill="#64748b" text-anchor="end">${v}</text>`);
   const incMonths = new Set(D.incidents.map(i => i.day.slice(0, 7)));
   m.forEach((r, i) => {
     const x = Lp + i * bw + bw * 0.18, w = bw * 0.64;
